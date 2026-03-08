@@ -1,64 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Knight's Burden</title>
-    <!-- Google Fonts for medieval dark fantasy feel -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;1,300&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <!-- Audio Elements -->
     <audio id="bg-music" src="audio/background.mp3" loop></audio>
     <audio id="click-sound" src="audio/click.mp3"></audio>
 
+    <!-- Scene transition black fade overlay -->
+    <div id="scene-overlay"></div>
+
+    <!-- Achievement toast popup (injected by JS) -->
+    <div id="achievement-toast" aria-live="polite">
+        <div class="toast-inner">
+            <span class="toast-icon">🏆</span>
+            <div class="toast-text">
+                <span class="toast-label">Achievement Unlocked</span>
+                <span class="toast-title" id="toast-title-text"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Panel Overlay -->
+    <div id="achievements-panel" class="panel-hidden">
+        <div class="panel-inner">
+            <div class="panel-header">
+                <h2>Achievements</h2>
+                <button id="close-achievements-btn" class="ui-button">✕ Close</button>
+            </div>
+            <ul id="achievements-list">
+                <!-- Populated by JS -->
+            </ul>
+        </div>
+    </div>
+
     <!-- Main Game container -->
     <main id="game-container">
-        <!-- Background Layer -->
-        <div id="background-layer"></div>
+        <!-- Background Layer (two layers for crossfade) -->
+        <div id="bg-a" class="background-layer active"></div>
+        <div id="bg-b" class="background-layer"></div>
 
         <!-- UI Overlay -->
         <div id="ui-layer">
-            
-            <!-- Header section: Title and Restart -->
+
+            <!-- Header: Title, Achievements Button, Restart -->
             <header>
                 <div class="header-content">
                     <h1 id="game-title">The Knight's Burden</h1>
-                    <button id="restart-btn" class="ui-button">Restart Game</button>
+                    <div class="header-actions">
+                        <button id="achievements-btn" class="ui-button">🏆 Achievements</button>
+                        <button id="restart-btn" class="ui-button">↺ Restart</button>
+                    </div>
                 </div>
             </header>
 
-            <!-- Middle section: Story Text and Character -->
+            <!-- Middle: Character portrait (left side, large) -->
             <section id="scene-area">
                 <div id="character-container">
                     <img id="character-portrait" src="" alt="Character Portrait">
                 </div>
-                
-                <div id="text-container">
-                    <p id="story-text"></p>
-                </div>
             </section>
 
-            <!-- Bottom section: Choices -->
+            <!-- VN Dialogue Box (bottom) -->
+            <div id="dialogue-box">
+                <div id="character-name-label"><!-- JS-injected --></div>
+                <p id="story-text"></p>
+            </div>
+
+            <!-- Choice buttons (just above inventory) -->
             <nav id="choices-container">
-                <!-- Choice buttons will be injected here dynamically -->
+                <!-- Injected by JS -->
             </nav>
 
-            <!-- Footer section: Inventory -->
+            <!-- Inventory Bar (footer) -->
             <footer id="inventory-area">
-                <h2>Inventory</h2>
+                <span class="inventory-heading">⚔ Inventory</span>
                 <ul id="inventory-list">
-                    <!-- Inventory items will be injected here -->
+                    <!-- Injected by JS -->
                 </ul>
             </footer>
 
         </div>
     </main>
 
-    <!-- Scripts -->
     <script src="storyData.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>

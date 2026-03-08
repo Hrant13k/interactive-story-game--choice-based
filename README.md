@@ -1,62 +1,115 @@
-# The Knight's Burden - Interactive Story Game
+# The Knight's Burden — Interactive Story Game v2.0
 
-A medieval fantasy interactive story game built with HTML, CSS, and Vanilla JavaScript. The game features branching storylines, multiple endings, an inventory system, and dynamic audio-visual states.
+A medieval fantasy interactive visual novel game built with **HTML, CSS, and Vanilla JavaScript only**.
+Open `index.html` in any modern browser to play.
 
-To play, simply open `index.html` in your web browser.
+![Interactive Story Game Website Preview](./backgrounds/preview.png)
+
+---
+
+## Live Preview
+
+https://hrant13k.github.io/interactive-story-game--choice-based/
+
+---
+
+## What Was Added in v2
+
+| Feature | Description |
+|---|---|
+| **VN Dialogue Box** | Character name strip above text, dark styled box at bottom |
+| **Scene Crossfade** | Dual-layer background opacity crossfade between scenes |
+| **Fade Transition** | Black overlay fades in/out between scenes for cinematic feel |
+| **Stagger Animations** | Choice buttons slide up with cascading delay on each scene |
+| **Achievement System** | 6 achievements saved in `localStorage`, unlocked by visiting key scenes |
+| **Toast Notifications** | Corner popup appears when you unlock an achievement |
+| **Achievements Panel** | Click the 🏆 button in the header to view all achievements |
+| **Improved Inventory** | Pop-in animation when items are collected |
+| **Smooth Restart** | Fade-to-black transition before resetting the game state |
+
+---
+
+## Achievements
+
+Achievements are automatically unlocked when the player visits a specific scene that has an `achievement` field.
+
+| Icon | Name | How to Unlock |
+|---|---|---|
+| ⚔️ | Well Prepared | Find the sword in the abandoned cart |
+| ☮️ | Peacemaker | Listen to the witch instead of attacking |
+| 🗡️ | Bandit Slayer | Defeat the bandits using the sword |
+| 🔥 | Betrayed the Kingdom | Join the bandit ranks |
+| 🛡️ | Loyal Knight | Accept the King's dragon quest |
+| 🏆 | Dragon Slayer | Use the key to find Dragonsbane and kill the dragon |
+
+### How achievements are triggered
+
+When a scene is loaded, `script.js` checks for an `achievement` field:
+
+```javascript
+if (scene.achievement) {
+    const { id, label } = scene.achievement;
+    unlockAchievement(id, label); // Saves to localStorage, shows toast
+}
+```
+
+### How to add a new achievement
+
+**Step 1** — Register it in `ACHIEVEMENT_DEFS` at the top of `script.js`:
+```javascript
+{ id: 'my_achievement', icon: '🌟', label: 'My Achievement', hint: 'Do something special.' }
+```
+
+**Step 2** — Add it to the target scene in `storyData.js`:
+```javascript
+"my_scene": {
+    text: "Something great happened.",
+    background: "backgrounds/landscape.webp",
+    achievement: { id: 'my_achievement', label: 'My Achievement' },
+    choices: [ ... ]
+}
+```
+
+That's it. The system handles display, toast, persistence, and panel listing automatically.
 
 ---
 
 ## How to Expand the Game
 
-You can easily add new content to this game without modifying the core engine (`script.js`). Everything is controlled via the `storyData.js` file and by placing assets into the respective folders.
+### Add a New Scene
+Add a new key to the `storyData` object in `storyData.js`:
 
-### 1. How to Add New Backgrounds
-1. Place your new background image (e.g., `cave.jpg`) inside the `backgrounds/` folder.
-2. In `storyData.js`, assign it to a scene using the `background` property:
-   ```javascript
-   "scene_id": {
-       text: "You enter a dark cave...",
-       background: "backgrounds/cave.jpg",
-       choices: [ ... ]
-   }
-   ```
-
-### 2. How to Add New Characters
-1. Place a portrait image (preferably with a transparent background, e.g., `goblin.png`) in the `characters/` folder.
-2. Assign it to a scene using the `character` property.
-   ```javascript
-   "scene_id": {
-       text: "A goblin appears!",
-       background: "backgrounds/forest.jpg",
-       character: "characters/goblin.png",
-       choices: [ ... ]
-   }
-   ```
-*(Note: If a scene has no `character` property, the portrait area will remain empty.)*
-
-### 3. How to Add New Scenes
-To add a new scene, create a new object key in `storyData.js` and link it to existing choices:
 ```javascript
-"new_scene_id": {
-    text: "Here is what happens in this new scene.",
-    background: "backgrounds/landscape.webp", // Path to background
-    character: "characters/knightpng",        // Optional: Path to character
-    item: "Magic Potion",                     // Optional: Grants an item 
+"cave_entrance": {
+    characterName: "The Narrator",    // shown in name strip (optional)
+    text: "You enter the dark cave.", // narrative text
+    background: "backgrounds/forest.jpg",
+    character: "characters/dragon.webp", // optional portrait
+    item: "Torch",                    // optional: adds item to inventory
+    achievement: { id: "explorer", label: "The Explorer" }, // optional
     choices: [
-        { text: "Go back", next: "previous_scene_id" },
-        { text: "Move forward", next: "another_scene_id" }
+        { text: "Go deeper", next: "cave_deep" },
+        { text: "Turn back", next: "forest_path" }
     ]
 }
 ```
 
-### 4. How to Add New Items (and Conditional Choices)
-Items are automatically added to the inventory if you include the `item` property in a scene.
-1. Add `item: "Item Name"` to the scene where the player finds it.
-2. To make a choice **require** that item (disabled if missing), use `requiredItem`:
-   ```javascript
-   {
-       text: "Unlock the magical door",
-       next: "secret_room_scene",
-       requiredItem: "Magic Potion"
-   }
-   ```
+Then link to it from another scene by setting `next: "cave_entrance"` on a choice.
+
+### Add a New Background
+1. Place image in `backgrounds/` (e.g., `cave.jpg`)
+2. Reference it: `background: "backgrounds/cave.jpg"`
+
+### Add a New Character Portrait
+1. Place a PNG with transparency in `characters/` (e.g., `wizard.png`)
+2. Reference it: `character: "characters/wizard.png"`
+
+### Add a New Collectible Item
+1. Add `item: "Lantern"` to the discovery scene
+2. Gate a choice behind it with `requiredItem: "Lantern"` on the choice object
+
+### Add a Choice Requiring an Item
+```javascript
+{ text: "Light the darkness", next: "lit_cave", requiredItem: "Lantern" }
+```
+The button will be disabled with a lock indicator if the player doesn't have the item.
