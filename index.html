@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Knight's Burden</title>
+    <!-- Google Fonts for medieval dark fantasy feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Audio Elements -->
+    <audio id="bg-music" src="audio/background.mp3" loop></audio>
+    <audio id="click-sound" src="audio/click.mp3"></audio>
+
+    <!-- Main Game container -->
+    <main id="game-container">
+        <!-- Background Layer -->
+        <div id="background-layer"></div>
+
+        <!-- UI Overlay -->
+        <div id="ui-layer">
+            
+            <!-- Header section: Title and Restart -->
+            <header>
+                <div class="header-content">
+                    <h1 id="game-title">The Knight's Burden</h1>
+                    <button id="restart-btn" class="ui-button">Restart Game</button>
+                </div>
+            </header>
+
+            <!-- Middle section: Story Text and Character -->
+            <section id="scene-area">
+                <div id="character-container">
+                    <img id="character-portrait" src="" alt="Character Portrait">
+                </div>
+                
+                <div id="text-container">
+                    <p id="story-text"></p>
+                </div>
+            </section>
+
+            <!-- Bottom section: Choices -->
+            <nav id="choices-container">
+                <!-- Choice buttons will be injected here dynamically -->
+            </nav>
+
+            <!-- Footer section: Inventory -->
+            <footer id="inventory-area">
+                <h2>Inventory</h2>
+                <ul id="inventory-list">
+                    <!-- Inventory items will be injected here -->
+                </ul>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="storyData.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
